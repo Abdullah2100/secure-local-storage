@@ -1,6 +1,8 @@
 package com.example.localscurestorage.viewModle
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.provider.Settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.localscurestorage.servuces.FileDataDatabase
@@ -22,12 +24,16 @@ class FileDataViewModle( val createDatabase:(context: Context, databaseName:Stri
     var error = MutableStateFlow<String?>(null);
 
 
+     @SuppressLint("HardwareIds")
+     fun generateHashDatabaseName(context: Context): String {
+         val deviceId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+         return deviceId.toString()
+     }
 
-     fun createDatabase(context: Context){
-         
+     fun createDatabas(context: Context){
            try {
                roomOperationFlow.update { enRoomOperationStatus.LOADIN }
-               createDatabase(context)
+               fileDataBaseHolder= createDatabase(context,generateHashDatabaseName(context))
                roomOperationFlow.update { enRoomOperationStatus.COMPLATIN }
            }catch (e:Exception) {
                roomOperationFlow.update { enRoomOperationStatus.ERROR }

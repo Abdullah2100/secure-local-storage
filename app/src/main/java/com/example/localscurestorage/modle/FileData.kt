@@ -9,7 +9,8 @@ import java.util.Date
 @Entity(tableName = "files")
 data class FileData(
   @PrimaryKey val id:Int? = null,
-    var name:String="",
-    var data:ByteArray,
-    var createdAt:String?  = Calendar.getInstance().getTime().toString(),
+  var name:String="",
+  var data:ByteArray,
+  var createdAt:String?  = Calendar.getInstance().time.toString(),
+  var mintype:String
 );
