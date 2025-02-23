@@ -1,20 +1,17 @@
 package com.example.localscurestorage.viewModle
 
+import android.R.attr.password
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.localscurestorage.servuces.FileDataDatabase
 import com.example.localscurestorage.util.enRoomOperationStatus
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import org.mindrot.jbcrypt.BCrypt
+import java.security.MessageDigest
+
 
 class FileDataViewModle( val createDatabase:(context: Context, databaseName:String)->FileDataDatabase):ViewModel() {
 
@@ -24,16 +21,24 @@ class FileDataViewModle( val createDatabase:(context: Context, databaseName:Stri
     var error = MutableStateFlow<String?>(null);
 
 
-     @SuppressLint("HardwareIds")
-     fun generateHashDatabaseName(context: Context): String {
+    private fun String.toSHA256(): String {
+        val bytes = MessageDigest.getInstance("SHA-256").digest(this.toByteArray())
+        return bytes.joinToString("") { "%02x".format(it) } // Convert to Hex String
+    }
+
+
+    @SuppressLint("HardwareIds")
+    private  fun generateHashDatabaseName(context: Context,databaseName:String): String {
          val deviceId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-         return deviceId.toString()
+         val databaseNameHolder =deviceId+databaseName;
+         val databaseNameHash = databaseNameHolder.toSHA256()+".db"
+         return databaseNameHash
      }
 
-     fun createDatabas(context: Context){
+     fun createDatabas(context: Context,databaseName: String){
            try {
                roomOperationFlow.update { enRoomOperationStatus.LOADIN }
-               fileDataBaseHolder= createDatabase(context,generateHashDatabaseName(context))
+               fileDataBaseHolder= createDatabase(context,generateHashDatabaseName(context,databaseName))
                roomOperationFlow.update { enRoomOperationStatus.COMPLATIN }
            }catch (e:Exception) {
                roomOperationFlow.update { enRoomOperationStatus.ERROR }

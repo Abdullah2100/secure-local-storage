@@ -18,15 +18,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.localscurestorage.viewModle.FileDataViewModle
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable()
-@Preview()
-fun StartPage(){
+fun StartPage(viewModel: FileDataViewModle = koinViewModel()){
     var databaseNam = remember { mutableStateOf("ادخل اسم قاعدة البيانات") }
+    val context = LocalContext.current;
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -42,7 +45,7 @@ fun StartPage(){
 
         )
         Button(
-            onClick = { /* Handle click */ },
+            onClick = { viewModel.createDatabase(context,databaseNam.value)},
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .padding(start = 49.dp, end = 49.dp, top = 5.dp)
