@@ -2,12 +2,14 @@ package com.example.localscurestorage.view
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -28,27 +30,29 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable()
 fun StartPage(viewModel: FileDataViewModle = koinViewModel()){
-    var databaseNam = remember { mutableStateOf("ادخل اسم قاعدة البيانات") }
+    var databaseNam = remember { mutableStateOf("") }
     val context = LocalContext.current;
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
+        , modifier = Modifier.fillMaxSize(1f)
     ) {
-        TextField(
+        OutlinedTextField(
             onValueChange = {
                 databaseNam.value =it
             },
             value = databaseNam.value
                 ,
             shape = RoundedCornerShape(7.dp)
-
+            , label = {
+                Text("ادخل اسم قاعدة البيانات")
+            }
         )
         Button(
-            onClick = { viewModel.createDatabase(context,databaseNam.value)},
+            onClick = { viewModel.createDatabas(context,databaseNam.value)},
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
-                .padding(start = 49.dp, end = 49.dp, top = 5.dp)
+                .padding(start = 64.dp, end = 64.dp, top = 5.dp)
                 .fillMaxWidth(1f)
 
         ) {

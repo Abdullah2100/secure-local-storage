@@ -4,7 +4,6 @@ import android.app.Application
 import com.example.localscurestorage.DI.databaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
-import org.koin.dsl.module
 
 
 class AppApplication:Application() {
@@ -12,10 +11,7 @@ class AppApplication:Application() {
         super.onCreate()
         startKoin {
             androidContext(this@AppApplication)
-            module {
-               databaseModule
-            }
-
+            modules(databaseModule) // Make sure to include your module
         }
     }
 }

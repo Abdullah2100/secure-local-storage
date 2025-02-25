@@ -1,15 +1,18 @@
 package com.example.localscurestorage.viewModle
 
-import android.R.attr.password
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.localscurestorage.modle.FileData
 import com.example.localscurestorage.servuces.FileDataDatabase
 import com.example.localscurestorage.util.enRoomOperationStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import org.mindrot.jbcrypt.BCrypt
+import kotlinx.coroutines.launch
 import java.security.MessageDigest
 
 
@@ -37,20 +40,26 @@ class FileDataViewModle( val createDatabase:(context: Context, databaseName:Stri
 
      fun createDatabas(context: Context,databaseName: String){
            try {
+               Log.d("createDatabase","start")
                roomOperationFlow.update { enRoomOperationStatus.LOADIN }
-               fileDataBaseHolder= createDatabase(context,generateHashDatabaseName(context,databaseName))
+               val databaseNameGen = generateHashDatabaseName(context,databaseName);
+               fileDataBaseHolder= createDatabase(context,databaseNameGen)
+               val databasePath = context.getDatabasePath(databaseNameGen).absolutePath
+               Log.d("createDatabase","conplate  ${databasePath}")
+               CoroutineScope(Dispatchers.IO).launch {
+                   fileDataBaseHolder?.fileDo()?.addNewFile(FileData(null,null,null,null))
+               }
                roomOperationFlow.update { enRoomOperationStatus.COMPLATIN }
            }catch (e:Exception) {
                roomOperationFlow.update { enRoomOperationStatus.ERROR }
                error.update { e.message }
+
            }
+         finally {
+             Log.d("createDatabase","complate")
+
+         }
 
         }
-
-
-
-
-
-
 
 }
