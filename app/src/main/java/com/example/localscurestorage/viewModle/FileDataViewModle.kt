@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.localscurestorage.modle.FileData
 import com.example.localscurestorage.servuces.FileDataDatabase
+import com.example.localscurestorage.util.General
 import com.example.localscurestorage.util.enRoomOperationStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,17 +25,12 @@ class FileDataViewModle( val createDatabase:(context: Context, databaseName:Stri
     var error = MutableStateFlow<String?>(null);
 
 
-    private fun String.toSHA256(): String {
-        val bytes = MessageDigest.getInstance("SHA-256").digest(this.toByteArray())
-        return bytes.joinToString("") { "%02x".format(it) } // Convert to Hex String
-    }
-
 
     @SuppressLint("HardwareIds")
     private  fun generateHashDatabaseName(context: Context,databaseName:String): String {
          val deviceId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
          val databaseNameHolder =deviceId+databaseName;
-         val databaseNameHash = databaseNameHolder.toSHA256()+".db"
+         val databaseNameHash = General.hashString(databaseNameHolder)+".db"
          return databaseNameHash
      }
 

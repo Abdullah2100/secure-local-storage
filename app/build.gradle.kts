@@ -91,5 +91,9 @@ dependencies {
     implementation(libs.koin.viewmodel)
     implementation(libs.koin.compose)
 
+    //secureDataBase
+    implementation (libs.android.database.sqlcipher)
+    implementation (libs.sqlLight.android)
+
 
 }
