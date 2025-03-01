@@ -13,7 +13,10 @@ ksp = "2.0.20-1.0.24"
 room = "2.6.1"
 koin = "4.0.0"
 sqlLight="2.1.0"
-
+nav-version="2.8.8"
+jetpack-constrin="1.0.1"
+serialize-plugin="2.1.10"
+serialize-lib = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,14 +46,22 @@ koin-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref
 koin-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 
 #room
-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-rxjava2 = { module = "androidx.room:room-rxjava2", version.ref = "room" }
-room-rxjava3 = { module = "androidx.room:room-rxjava3", version.ref = "room" }
-room-guava = { module = "androidx.room:room-guava", version.ref = "room" }
-room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+room-runtime = { group = "androidx.room",name="room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room",name="room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room",name="room-ktx", version.ref = "room" }
+room-guava = { group = "androidx.room",name="room-guava", version.ref = "room" }
+room-testing = { group = "androidx.room",name="room-testing", version.ref = "room" }
+room-paging = { group = "androidx.room",name="room-paging", version.ref = "room" }
+
+#navigation
+compose-nav = {group="androidx.navigation",name="navigation-compose",version.ref="nav-version"}
+
+#constrain
+constrain-jetpack = {group="androidx.constraintlayout",name="constraintlayout-compose",version.ref="jetpack-constrin"}
+
+
+#serialization library
+serialization-lib = {group="org.jetbrains.kotlinx",name="kotlinx-serialization-json",version.ref="serialize-lib"}
 
 
 [plugins]
@@ -59,3 +70,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
+serializable-kotlin ={id="org.jetbrains.kotlin.plugin.serialization",version.ref="serialize-plugin"}

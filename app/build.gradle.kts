@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias(libs.plugins.serializable.kotlin)
 }
 
 android {
@@ -78,8 +79,6 @@ dependencies {
     ksp(libs.room.compiler)
     annotationProcessor(libs.room.compiler)
     implementation(libs.room.ktx)
-    implementation(libs.room.rxjava2)
-    implementation(libs.room.rxjava3)
     implementation(libs.room.guava)
     testImplementation(libs.room.testing)
     implementation(libs.room.paging)
@@ -95,5 +94,14 @@ dependencies {
     implementation (libs.android.database.sqlcipher)
     implementation (libs.sqlLight.android)
 
+    //nav
+    implementation(libs.compose.nav)
+
+    //constrain
+    implementation(libs.constrain.jetpack)
+
+
+    //serializable-lib
+    implementation(libs.serialization.lib)
 
 }

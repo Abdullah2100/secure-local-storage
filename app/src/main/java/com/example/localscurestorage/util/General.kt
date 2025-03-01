@@ -1,5 +1,6 @@
 package com.example.localscurestorage.util
 
+import androidx.lifecycle.MutableLiveData
 import net.sqlcipher.database.SQLiteDatabase
 import androidx.room.Room.databaseBuilder
 import net.sqlcipher.database.SupportFactory
@@ -22,6 +23,8 @@ class General {
             val passPhraseBytes = SQLiteDatabase.getBytes(hashDatabaseName.toCharArray())
             return SupportFactory(passPhraseBytes)
         }
+
+        var canGoBAckToStartScreen = MutableLiveData(false);
 
     }
 
