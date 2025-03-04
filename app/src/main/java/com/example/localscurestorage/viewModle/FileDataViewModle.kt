@@ -82,10 +82,10 @@ class FileDataViewModle() : ViewModel() {
         return true;
     }
 
-    fun createDatabas(context: Context, databaseName: String,navContoller: NavHostController) {
+    fun createDatabas(context: Context, databaseName: String, navContoller: NavHostController) {
 
         val result = validationInput(databaseName)
-        if (result==false) {
+        if (result == false) {
             return;
         }
         viewModelScope.launch(Dispatchers.Main + errorHandler)
@@ -98,47 +98,48 @@ class FileDataViewModle() : ViewModel() {
             val databaseNameGen = generateHashDatabaseName(context, databaseName);
 
             val dataBaseHolder = createDatabase(context, databaseNameGen)
-            DataBaseHolder.fileDataBaseHolder.emit(dataBaseHolder)
-            val fileDataHolder = FileData(null,null, mintype = null, createdAt = null)
 
+            DataBaseHolder.fileDataBaseHolder.emit(dataBaseHolder)
+
+            getLocalFile()
 
             context.getDatabasePath(databaseNameGen).absolutePath
 
             operationFlow.value = enRoomOperationStatus.COMPLATIN
-            navContoller.navigate(Screen.homeGraph){
-                popUpTo(0)
-            }
-        }
 
+            navContoller.navigate(Screen.homeGraph) { popUpTo(0) }
+
+        }
     }
 
     fun clearErrorMessage() {
         viewModelScope.launch {
-            error.emit( "")
+            error.emit("")
         }
     }
 
 
-    fun addNewFile(fileString: Uri,ocntext:Context){
-        viewModelScope.launch (Dispatchers.IO +errorHandler)
+    fun addNewFile(fileString: Uri, ocntext: Context) {
+        viewModelScope.launch(Dispatchers.IO + errorHandler)
         {
             operationFlow.emit(enRoomOperationStatus.LOADIN)
 
 
-            val fileInfoArray = General.fileInfoAndByteFromUri(ocntext,fileString)
+            val fileInfoArray = General.fileInfoAndByteFromUri(ocntext, fileString)
 
             val fileName = fileInfoArray[0] as String;
             val minFile = fileInfoArray[1] as String;
             val fileSize = fileInfoArray[2] as Long
             val fileByte = fileInfoArray[3] as ByteArray;
 
-            val fileDataHolder = FileData(null,
+            val fileDataHolder = FileData(
+                null,
                 fileByte,
                 mintype = minFile,
                 createdAt = Calendar.getInstance().time.toString(),
                 name = fileName,
                 size = fileSize,
-                )
+            )
 
             DataBaseHolder.fileDataBaseHolder.value?.fileDo()?.addNewFile(fileDataHolder)
 
@@ -149,16 +150,25 @@ class FileDataViewModle() : ViewModel() {
         }
     }
 
-    fun getLocalFile(){
-        viewModelScope.launch(Dispatchers.IO+errorHandler){
+    fun getLocalFile() {
+        viewModelScope.launch(Dispatchers.IO + errorHandler) {
             operationFlow.value = enRoomOperationStatus.LOADIN
 
-             val files = DataBaseHolder
-                 .fileDataBaseHolder
-                 .value?.fileDo()?.getFileDataByPaggination(
-                   pageNumber =   DataBaseHolder.pageNumber.value, numberOfFile = 24
-                 )
-             DataBaseHolder.localFiles.emit(files)
+            val files = DataBaseHolder
+                .fileDataBaseHolder
+                .value?.fileDo()?.getFileDataByPaggination(
+                    pageNumber = DataBaseHolder.pageNumber.value, numberOfFile = 24
+                )
+            when (DataBaseHolder.localFiles.value) {
+                null -> DataBaseHolder.localFiles.emit(files as MutableList<FileData>?)
+                else -> {
+                    if (files != null) {
+                        DataBaseHolder.localFiles.value!!.addAll(files)
+                    }
+                }
+            }
+
+
 
             operationFlow.value = enRoomOperationStatus.COMPLATIN
         }

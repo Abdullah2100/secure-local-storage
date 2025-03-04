@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 class DataBaseHolder {
     companion object {
         var fileDataBaseHolder = MutableStateFlow<FileDataDatabase?>(null)
-        var localFiles = MutableStateFlow<List<FileData>?>(null)
+        var localFiles = MutableStateFlow<MutableList<FileData>?>(null)
         var pageNumber = MutableStateFlow<Int>(1)
 
     }
