@@ -14,5 +14,5 @@ interface FileDataDao {
     suspend fun addNewFile(fileData:FileData)
 
     @Query("SELECT * FROM files ORDER BY createdAt DESC LIMIT :numberOfFile OFFSET :pageNumber")
-     fun getFileDataByPaggination(numberOfFile:Int,pageNumber:Int):Flow<List<FileData>>
+    suspend  fun getFileDataByPaggination(numberOfFile:Int,pageNumber:Int):List<FileData>
 }
