@@ -59,7 +59,7 @@ fun SnackBarBuilder(
     LaunchedEffect(error.value) {
         if (error.value?.isNotEmpty() == true) {
             coroutine.launch {
-                delay(3000)
+                delay(5000)
                 isVisible.targetState = false;
                 delay(50)
                 viewModel.clearErrorMessage()

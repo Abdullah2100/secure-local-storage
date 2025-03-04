@@ -10,5 +10,7 @@ data class FileData(
   @PrimaryKey(autoGenerate = true) val id: Int? = 0, // Auto-increment ID  var name:String="",
   var data:ByteArray?=null,
   var createdAt:String?  = Calendar.getInstance().time.toString(),
-  var mintype:String?=null
+  var mintype:String?=null,
+  var name:String?=null,
+  var size:Long? = null
 );
