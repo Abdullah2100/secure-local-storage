@@ -91,13 +91,16 @@ fun Home(
 
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
 
-                    items(files.value?.size?:0, itemContent ={
-                        it->
-                        Box(modifier = Modifier.fillMaxWidth()) {
-//                            Text("${files.value!=null?files?.value[it].mintype.toString():""}")
-                        }
+                    when(files.value){
+                        null->{
+                            item {
 
-                    })
+                            }
+                        }
+                        else->{
+
+                        }
+                    }
 
                 }
 
